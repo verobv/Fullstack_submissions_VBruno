@@ -114,6 +114,15 @@ const App = () => {
           setNotification({ message: null, type: null })
         }, 5000)
       })
+      .catch(error => {
+        setNotification({
+          message: error.response.data.error,
+          type: 'error'
+        })
+        setTimeout(() => {
+          setNotification({ message: null, type: null })
+        }, 5000)
+      })
   }
 
   const handlePersonChange = (event) => {
