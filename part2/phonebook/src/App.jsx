@@ -94,7 +94,9 @@ const App = () => {
         setNotification({
           message: errorMessage, type: 'error'
         })
-        setPersons(persons.filter((person) => person.id !== exists.id))
+        if (error.response?.status === 404) {
+          setPersons(persons.filter(p => p.id !== exists.id))
+        }
         setNewName('')
         setNewNumber('')
         setTimeout(() => {
@@ -159,7 +161,7 @@ const App = () => {
         setNotification({ message: null, type: null })
       }, 5000)
       })
-      .catch((error) => {
+      .catch(() => {
         setNotification({ message: `Information of ${name} has already been removed`, type: 'error' })
         setPersons(persons.filter((person) => person.id !== id))
         setTimeout(() => {
