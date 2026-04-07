@@ -143,11 +143,11 @@ const App = () => {
       .remove(id)
       .then(() => {
         setPersons(persons.filter(person => person.id !== id))
+      })
       setNotification({ message: `Deleted ${name}`, type: 'success' })
       setTimeout(() => {
         setNotification({ message: null, type: null })
       }, 5000)
-      })
       .catch((error) => {
         setNotification({ message: `Information of ${name} has already been removed`, type: 'error' })
         setPersons(persons.filter((person) => person.id !== id))
