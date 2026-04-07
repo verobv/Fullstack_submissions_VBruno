@@ -89,8 +89,10 @@ const App = () => {
         }, 5000)
       })
       .catch(error => {
+        const errorMessage =
+          error.response?.data?.error || `Information of ${exists.name} has already been removed from server`
         setNotification({
-          message: `Information of ${exists.name} has already been removed from server`, type: 'error'
+          message: errorMessage, type: 'error'
         })
         setPersons(persons.filter((person) => person.id !== exists.id))
         setNewName('')

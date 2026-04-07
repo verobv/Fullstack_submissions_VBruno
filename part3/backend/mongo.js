@@ -41,7 +41,7 @@ notes.forEach(noteData => {
 
 setTimeout(() => mongoose.connection.close(), 1000)*/
 
-Note.find({important: true}).then(result => {
+Note.find({ important: true }).then(result => {
   result.forEach(note => {
     console.log(note)
   })

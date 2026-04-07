@@ -26,7 +26,7 @@ const Person = mongoose.model('Person', personSchema)
 
 // list or add
 if (args.length === 3) {
-    Person.find({}).then(persons => {
+  Person.find({}).then(persons => {
     console.log('phonebook:')
     persons.forEach(person => {
       console.log(`${person.name} ${person.number}`)
@@ -34,19 +34,19 @@ if (args.length === 3) {
     mongoose.connection.close()
   })
 } else if (args.length === 5) {
-    const name = args[3]
-    const num = args[4]
+  const name = args[3]
+  const num = args[4]
 
-    person = new Person({name, number: num})
+  const person = new Person({ name, number: num })
 
-    person.save().then(result => {
-        console.log(`added ${name} number ${num} to phonebook`)
-        mongoose.connection.close()
-    })
+  person.save().then(() => {
+    console.log(`added ${name} number ${num} to phonebook`)
+    mongoose.connection.close()
+  })
 } else {
-    console.log('Incorrect number of arguments.')
-    console.log('Usage:')
-    console.log('To add: node mongo.js <password> "<name>" <number>')
-    console.log('To list: node mongo.js <password>')
-    process.exit(1)
+  console.log('Incorrect number of arguments.')
+  console.log('Usage:')
+  console.log('To add: node mongo.js <password> "<name>" <number>')
+  console.log('To list: node mongo.js <password>')
+  process.exit(1)
 }
