@@ -27,6 +27,8 @@ const createBlog = async (page, content) => {
   
   await page.getByRole('link', { name: 'new blog' }).click()
 
+  await expect(page.getByLabel('title')).toBeVisible()
+
   await page.getByLabel('title').fill(content[0])
   await page.getByLabel('author').fill(content[1])
   await page.getByLabel('url').fill(content[2])

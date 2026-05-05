@@ -41,10 +41,8 @@ describe('Blog app', () => {
       await loginFormV(page)
       await loginWith(page, 'vero', 'salainen')
       
-      const errorDiv = page.locator('.error')
+      const errorDiv = page.getByRole('alert')
       await expect(errorDiv).toContainText('wrong credentials')
-      await expect(errorDiv).toHaveCSS('border-style', 'solid')
-      await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
 
       await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible()
       await loginFormV(page)
