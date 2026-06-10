@@ -16,6 +16,8 @@ import NotFound from './components/NotFound'
 import { useUserValue, useUserDispatch } from './hooks/useUser'
 import { setUser, logoutUser } from './services/users'
 import { getUser, saveUser, removeUser } from './services/persistentUser'
+import UsersPage from './components/UsersPage'
+import UserView from './components/UserView'
 
 const App = () => {
   //const [user, setUser] = useState(null)
@@ -82,6 +84,20 @@ const App = () => {
       const blogs = queryClient.getQueryData(['blogs'])
       queryClient.setQueryData(['blogs'],
         blogs.filter(blog => blog.id !== deletedBlogId))
+    }
+  })
+
+  const commentMutation = useMutation({
+    mutationFn: ({ id, content }) => blogService.addComment(id, content),
+    onSuccess: (updatedBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(['blogs'],
+        blogs.map(blog =>
+          blog.id === updatedBlog.id
+            ? updatedBlog
+            : blog
+        )
+      )
     }
   })
 
@@ -185,6 +201,9 @@ const App = () => {
               <Button color="inherit" component={Link} to="/" sx={style}>
                 blogs
               </Button>
+              <Button color="inherit" component={Link} to="/users" sx={style}>
+                users
+              </Button>
               {user && (
                 <Button
                   color="inherit"
@@ -224,6 +243,7 @@ const App = () => {
                 <BlogView
                   handleLike={handleLike}
                   handleRemove={handleRemove}
+                  addComment={commentMutation.mutate}
                   user={user}
                 />
               }
@@ -232,6 +252,8 @@ const App = () => {
               path="/create"
               element={<CreateBlogPage user={user} createBlog={createBlog} />}
             />
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/users/:id" element={<UserView />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>

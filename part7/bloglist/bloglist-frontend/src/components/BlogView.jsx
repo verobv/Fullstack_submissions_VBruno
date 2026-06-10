@@ -1,9 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { Card, CardContent, Typography, Button } from '@mui/material'
+import { Card, CardContent, Typography, Button, List, ListItem, TextField } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
+import  { useField } from '../hooks/index'
 
-const BlogView = ({ handleLike, handleRemove, user }) => {
+const BlogView = ({ handleLike, handleRemove, addComment, user }) => {
   const { id } = useParams()
+  const comment = useField('text')
 
   const queryClient = useQueryClient()
 
@@ -12,11 +14,21 @@ const BlogView = ({ handleLike, handleRemove, user }) => {
 
   const navigate = useNavigate()
 
+  const submitComment = () => {
+
+    addComment({
+      id: blog.id,
+      content: comment.value
+    })
+
+    comment.reset()
+  }
+
   if (!blog) {
     return <div>blog not found</div>
   }
 
-  const checkOwner = blog.user?.username === user.username
+  const checkOwner = user && blog.user?.username === user.username
 
   const handleDelete = async (b) => {
     await handleRemove(b)
@@ -50,6 +62,36 @@ const BlogView = ({ handleLike, handleRemove, user }) => {
             remove
           </Button>
         )}
+
+        <Typography variant="h6" sx={{ mt: 1 }}>
+          comments
+        </Typography>
+
+        <TextField
+          size="small"
+          label="add comment"
+          value={comment.value}
+          onChange={comment.onChange}
+        />
+
+        <Button type="submit" onClick={submitComment} variant="contained" style={{ marginTop: 2 }}>
+          add comment
+        </Button>
+
+        {blog.comments?.length === 0 && (
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            no comments yet
+          </Typography>
+        )}
+
+        <List sx={{ listStyleType: 'disc', pl: 4 }}>
+          {blog.comments?.map((c) => (
+            <ListItem key={c._id} sx={{ display: 'list-item', py: 0, minHeight: 1 }}>
+              {c.content}
+            </ListItem>
+          ))}
+        </List>
+
       </CardContent>
     </Card>
   )
